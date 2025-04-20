@@ -1,34 +1,72 @@
+using Microsoft.VisualBasic;
+
 namespace HerosQuest
 {
     class MapGeneration
     {
-        public enum Danger
+        private static Random random = new Random();
+        //private static int roomID = 0;
+        private int ExitRoom;
+        private bool ExitExists = false;
+        private static Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
+        HashSet<int> visited = new HashSet<int>();
+        List<int> path = new List<int>();
+        private static Dictionary<int, List<Edge>> dungeon = new Dictionary<int, List<Edge>>();
+        public void DungeonSetup()
         {
-            Low = 1,
-            Medium = 3,
-            High = 5
+            for (int i = 0; i > 16; i++)
+            {
+                Edge newRoom = new(i, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
+                dungeon.Add(i, new List<Edge> {});
+                AddConnection(newRoom);
+            }
+            //ExitRoom = random.Next(dungeon.Count());
+            
         }
-
-        public class Edge
+        public void AddConnection(Edge newRoom)
         {
-            public string Destination { get; set; }
-            public int Distance { get; set; }
-            public int EngergyCost { get; set; }
-            public Danger DangerLevel { get; set; }
+            int connectingRoom = random.Next(dungeon.Count());
 
-            public Edge(string to, int distance, int engergyCost, Danger dangerLevel)
+            while(dungeon[connectingRoom].Count() == 4)
             {
-                Destination = to;
-                Distance = distance;
-                EngergyCost = engergyCost;
-                DangerLevel = dangerLevel;
+                connectingRoom = random.Next(dungeon.Count());
             }
-        }
-            public Dictionary<string, List<Edge>> Graph { get; set; }
 
-            public MapGeneration()
-            {
-                Graph = new Dictionary<string, List<Edge>>();
-            }
+            dungeon[connectingRoom].Add(newRoom);
         }
+        public void DepthFirstSearch()
+        {
+           
+        }
+        
     }
+}
+
+// class Room
+// {
+//     public int RoomNumber;
+//     public List<Edge> Paths;
+
+//     public Room(int roomNumber, Edge path)
+//     {
+//         RoomNumber = roomNumber;
+//         Paths.Add(path);
+//     }
+
+// }
+class Edge
+{
+    public int To;
+    public int Distance;
+    public int StrengthReq;
+    public int AgilityReq;
+    public int IntelligenceReq;
+    public Edge(int to, int distance, int strReq, int agiReq, int intelReq)
+    {
+        To = to;
+        Distance = distance;
+        StrengthReq = strReq;
+        AgilityReq = agiReq;
+        IntelligenceReq = intelReq;
+    }
+}

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\offma\\SchoolWork\\DSAA\\FinalProject\\DSSAFinalProject\\DSSAFinalProject.csproj",
+      "projectUniqueName": "C:\\Users\\offma\\SchoolWork\\DSAA\\HerosQuestFinal\\DSSAFinalProject\\DSSAFinalProject.csproj",
       "projectName": "DSSAFinalProject",
-      "projectPath": "C:\\Users\\offma\\SchoolWork\\DSAA\\FinalProject\\DSSAFinalProject\\DSSAFinalProject.csproj",
+      "projectPath": "C:\\Users\\offma\\SchoolWork\\DSAA\\HerosQuestFinal\\DSSAFinalProject\\DSSAFinalProject.csproj",
       "packagesPath": "C:\\Users\\offma\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\offma\\SchoolWork\\DSAA\\FinalProject\\DSSAFinalProject\\obj\\",
+      "outputPath": "C:\\Users\\offma\\SchoolWork\\DSAA\\HerosQuestFinal\\DSSAFinalProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\offma\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -65,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
