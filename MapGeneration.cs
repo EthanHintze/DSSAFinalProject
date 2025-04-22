@@ -6,11 +6,12 @@ namespace HerosQuest
     class MapGeneration
     {
         private Random random = new Random();
-        public bool ExitFound = false;
+        public bool EndDungeon = false;
         public int startRoom = 0;
         public int nextRoom = 0;
 
         private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
+        private Stack<Item> PossibleTreasure = new Stack<Item>();
         public HashSet<int> visited { get; set; }
 
         public Stack<Edge> visitedRooms = new Stack<Edge>();
@@ -19,15 +20,24 @@ namespace HerosQuest
         public Dictionary<int, List<Edge>> dungeon { get; set; }
         public List<Edge> roomList { get; set; }
 
+        public CharacterCreator playerCharacter { get; set; }
 
         public MapGeneration()
         {
             dungeon = new Dictionary<int, List<Edge>>();
             roomList = new List<Edge>();
             visited = new HashSet<int>();
+            playerCharacter = new CharacterCreator(3, 3, 3);
         }
         public bool DungeonSetup()
         {
+            PossibleTreasure.Push(new Item("Sword", 5, 0, 0, 30, false));
+            PossibleTreasure.Push(new Item("Gem", 0, 0, 0, 300, false));
+            PossibleTreasure.Push(new Item("Lockpick", 0, 0, 0, 20, true));
+            PossibleTreasure.Push(new Item("Smart Glasses", 0, 0, 5, 70, false));
+            PossibleTreasure.Push(new Item("Heelys", 0, 5, 0, 50, false));
+            PossibleTreasure.Push(new Item("Rock", 0, 0, 0, 1, false));
+
             for (int i = 0; i < 16; i++)
             {
                 Edge newRoom = new(i, i + 1, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
@@ -118,8 +128,9 @@ namespace HerosQuest
             visitedRooms.Push(roomList[startRoom]);
 
             Console.WriteLine($"You are in Room {startRoom}");
+            CheckForTreasure();
             TraverseDungeon(startRoom);
-            if (!ExitFound)
+            if (!EndDungeon)
             {
                 Console.Write("Where will you go?: ");
                 nextRoom = int.Parse(Console.ReadLine());
@@ -152,11 +163,82 @@ namespace HerosQuest
             }
             return false;
         }
+        public void CheckForTreasure()
+        {
+            if (random.Next(2) == 0)
+            {
+                Console.WriteLine($"You found {PossibleTreasure.Peek()}");
+                Console.WriteLine($"Pick it up?");
+
+                if (playerCharacter.inventory.Count == 5)
+                {
+                    Console.WriteLine($" you will drop {playerCharacter.inventory.First()}");
+                }
+                Console.WriteLine("1) Yes");
+                Console.WriteLine("2) No");
+                int checkChoice = int.Parse(Console.ReadLine());
+                if (checkChoice == 1)
+                {
+                    if (playerCharacter.inventory.Count == 5)
+                    {
+                        IncDecPlayerStats(0);
+                        IncDecPlayerStats(1);
+
+                        playerCharacter.inventory.Dequeue();
+                        playerCharacter.inventory.Enqueue(PossibleTreasure.Peek());
+                        PossibleTreasure.Pop();
+                    }
+                    else
+                    {
+                        IncDecPlayerStats(0);
+
+                        playerCharacter.inventory.Enqueue(PossibleTreasure.Peek());
+                        PossibleTreasure.Pop();
+                    }
+                    Console.WriteLine("Item picked up");
+
+                }
+                if (checkChoice != 1)
+                {
+                    Console.WriteLine("Item was lost to the dungeon");
+
+                }
+            }
+        }
+
+        public void IncDecPlayerStats(int IncDec)
+        {
+            if (IncDec == 0)
+            {
+                playerCharacter._strength += PossibleTreasure.Peek()._strengthBuff;
+                playerCharacter._agility += PossibleTreasure.Peek()._agilityBuff;
+                playerCharacter._intellegence += PossibleTreasure.Peek()._intellegenceBuff;
+            }
+            if (IncDec == 1)
+            {
+                playerCharacter._strength -= playerCharacter.inventory.First()._strengthBuff;
+                playerCharacter._agility -= playerCharacter.inventory.First()._agilityBuff;
+                playerCharacter._intellegence -= playerCharacter.inventory.First()._intellegenceBuff;
+            }
+        }
+
+        public void ListPlayerInventory()
+        {
+            foreach(Item item in playerCharacter.inventory)
+            {
+                Console.WriteLine($"{item._name}");
+            }
+        }
+        
+        public void ListPlayerStats()
+        {
+          Console.WriteLine($"Health: {playerCharacter._health} Strength: {playerCharacter._strength} Agility: {playerCharacter._agility} Intellegince: {playerCharacter._intellegence}");   
+        }
         public bool TraverseDungeon(int roomID)
         {
             if (roomList[roomID].isExit)
             {
-                ExitFound = true;
+                EndDungeon = true;
                 return true;
             }
 
@@ -166,7 +248,7 @@ namespace HerosQuest
         public void DisplayRoomPaths(int roomID)
         {
             Console.WriteLine("-----Paths------");
-            if(dungeon[roomID].Count() == 1)
+            if (dungeon[roomID].Count() == 1)
             {
                 roomList[roomID].isDeadEnd = true;
             }

@@ -2,11 +2,11 @@ namespace HerosQuest
 {
     class CharacterCreator
     {
-        private static int _strength { get; set; }
-        private static int _agility { get; set; }
-        private static int _intellegence { get; set; }
-        private static int _health { get; set; }
-        private static Queue<string> _inventory= new Queue<string>();
+        public  int _strength { get; set; }
+        public  int _agility { get; set; }
+        public  int _intellegence { get; set; }
+        public  int _health { get; set; }
+        public  Queue<Item> inventory= new Queue<Item>();
 
         public CharacterCreator(int strength, int agility, int intellegence)
         {
@@ -14,8 +14,6 @@ namespace HerosQuest
             _agility = agility;
             _intellegence = intellegence;
             _health = 20;
-            _inventory.Enqueue("Sword");
-            _inventory.Enqueue("Health Potion");
         }
 
     }
