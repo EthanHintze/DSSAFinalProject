@@ -4,66 +4,97 @@ namespace HerosQuest
 {
     class MapGeneration
     {
-        private static Random random = new Random();
-        //private static int roomID = 0;
-        private int ExitRoom;
-        private bool ExitExists = false;
-        private static Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
+        private Random random = new Random();
+        private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
         HashSet<int> visited = new HashSet<int>();
         List<int> path = new List<int>();
-        private static Dictionary<int, List<Edge>> dungeon = new Dictionary<int, List<Edge>>();
-        public void DungeonSetup()
+        public Dictionary<int, List<Edge>> dungeon { get; set; }
+        public List<Edge> roomList { get; set; }
+
+
+        public MapGeneration()
         {
-            for (int i = 0; i > 16; i++)
+            dungeon = new Dictionary<int, List<Edge>>();
+            roomList = new List<Edge>();
+        }
+        public bool DungeonSetup()
+        {
+            for (int i = 0; i < 16; i++)
             {
                 Edge newRoom = new(i, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
-                dungeon.Add(i, new List<Edge> {});
+                dungeon.Add(i, new List<Edge> { });
+                roomList.Add(newRoom);
+
+                if (i == 1)
+                {
+                    dungeon[1].Add(roomList[0]);
+                    dungeon[0].Add(roomList[1]);
+                }
+                else if (i != 0)
+                {
+                    dungeon[i].Add(roomList[i-1 ]);
+                    dungeon[i-1].Add(roomList[i]);
+                }
+            }
+
+            for (int i = 16; i < 25; i++)
+            {
+                Edge newRoom = new(i, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
+                dungeon.Add(i, new List<Edge> { });
+                roomList.Add(newRoom);
+
                 AddConnection(newRoom);
             }
-            //ExitRoom = random.Next(dungeon.Count());
-            
+
+            return true;
         }
+
         public void AddConnection(Edge newRoom)
         {
-            int connectingRoom = random.Next(dungeon.Count());
+            int randomConnectingRoom = random.Next(dungeon.Count());
+            Edge connectingRoom = roomList[randomConnectingRoom];
 
-            while(dungeon[connectingRoom].Count() == 4)
+            while (dungeon[randomConnectingRoom].Count() == 4)
             {
-                connectingRoom = random.Next(dungeon.Count());
+                randomConnectingRoom = random.Next(dungeon.Count());
             }
 
-            dungeon[connectingRoom].Add(newRoom);
+            dungeon[randomConnectingRoom].Add(newRoom);
+            dungeon[newRoom.roomID].Add(connectingRoom);
         }
         public void DepthFirstSearch()
         {
-           
+
         }
-        
+        public void DisplayDungeonPaths()
+        {
+            for (int i = 0; i < dungeon.Count(); i++)
+            {
+                Console.Write($"Room #{i} connects too :");
+                if (dungeon[i].Count() != 0)
+                {
+                    foreach (Edge edge in dungeon[i])
+                    {
+                        Console.Write($"Room: {edge.roomID} ");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
     }
+
 }
 
-// class Room
-// {
-//     public int RoomNumber;
-//     public List<Edge> Paths;
-
-//     public Room(int roomNumber, Edge path)
-//     {
-//         RoomNumber = roomNumber;
-//         Paths.Add(path);
-//     }
-
-// }
 class Edge
 {
-    public int To;
+    public int roomID;
     public int Distance;
     public int StrengthReq;
     public int AgilityReq;
     public int IntelligenceReq;
     public Edge(int to, int distance, int strReq, int agiReq, int intelReq)
     {
-        To = to;
+        roomID = to;
         Distance = distance;
         StrengthReq = strReq;
         AgilityReq = agiReq;

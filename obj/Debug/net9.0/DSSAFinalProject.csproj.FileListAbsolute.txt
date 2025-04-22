@@ -1,0 +1,15 @@
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\bin\Debug\net9.0\DSSAFinalProject.exe
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\bin\Debug\net9.0\DSSAFinalProject.deps.json
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\bin\Debug\net9.0\DSSAFinalProject.runtimeconfig.json
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\bin\Debug\net9.0\DSSAFinalProject.dll
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\bin\Debug\net9.0\DSSAFinalProject.pdb
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.AssemblyInfoInputs.cache
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.AssemblyInfo.cs
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.csproj.CoreCompileInputs.cache
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.sourcelink.json
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.dll
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\refint\DSSAFinalProject.dll
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.pdb
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\DSSAFinalProject.genruntimeconfig.cache
+C:\Users\offma\SchoolWork\DSAA\FinalProject\DSSAFinalProject\obj\Debug\net9.0\ref\DSSAFinalProject.dll

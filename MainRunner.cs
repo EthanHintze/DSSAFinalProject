@@ -1,11 +1,18 @@
 ﻿namespace HerosQuest
 {
-    class program
+    class Program
     {
 
-    static void Main(string[] args)
-    {
-
-    }
+        static void Main(string[] args)
+        {
+            bool test = false;
+            MapGeneration userDungeon = new MapGeneration();
+            test = userDungeon.DungeonSetup();
+            if (test)
+            {
+                Console.WriteLine("Setup Successful");
+                userDungeon.DisplayDungeonPaths();
+            }
+        }
     }
 }

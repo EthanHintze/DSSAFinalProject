@@ -6,7 +6,7 @@ namespace HerosQuest
         private static int _agility { get; set; }
         private static int _intellegence { get; set; }
         private static int _health { get; set; }
-        private static Queue<string> _inventory { get; set; }
+        private static Queue<string> _inventory= new Queue<string>();
 
         public CharacterCreator(int strength, int agility, int intellegence)
         {
