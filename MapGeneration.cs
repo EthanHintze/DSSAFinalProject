@@ -125,6 +125,7 @@ namespace HerosQuest
         }
         public void RunDungeon()
         {
+            Console.Clear();
             visitedRooms.Push(roomList[startRoom]);
 
             Console.WriteLine($"You are in Room {startRoom}");
@@ -224,15 +225,19 @@ namespace HerosQuest
 
         public void ListPlayerInventory()
         {
-            foreach(Item item in playerCharacter.inventory)
+            Console.Clear();
+            Console.WriteLine("---Current Inventory---");
+            foreach (Item item in playerCharacter.inventory)
             {
                 Console.WriteLine($"{item._name}");
             }
         }
-        
+
         public void ListPlayerStats()
         {
-          Console.WriteLine($"Health: {playerCharacter._health} Strength: {playerCharacter._strength} Agility: {playerCharacter._agility} Intellegince: {playerCharacter._intellegence}");   
+            Console.Clear();
+            Console.WriteLine("---Current Stats---");
+            Console.WriteLine($"Health: {playerCharacter._health} Strength: {playerCharacter._strength} Agility: {playerCharacter._agility} Intellegince: {playerCharacter._intellegence}");
         }
         public bool TraverseDungeon(int roomID)
         {
