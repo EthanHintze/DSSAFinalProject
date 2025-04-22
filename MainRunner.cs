@@ -1,4 +1,6 @@
-﻿namespace HerosQuest
+﻿using System.Data;
+
+namespace HerosQuest
 {
     class Program
     {
@@ -12,6 +14,7 @@
             {
                 Console.WriteLine("Setup Successful");
                 userDungeon.DisplayDungeonPaths();
+                userDungeon.DFS(0);
             }
         }
     }
