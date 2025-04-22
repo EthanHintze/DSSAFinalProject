@@ -7,13 +7,19 @@ namespace HerosQuest
 
         static void Main(string[] args)
         {
-            bool test = false;
+            Stack<Edge> visitedRooms = new Stack<Edge>();
             MapGeneration userDungeon = new MapGeneration();
-            test = userDungeon.DungeonSetup();
+            bool test = userDungeon.DungeonSetup();
+
+            while (userDungeon.ExitFound != true)
+            {
+                userDungeon.RunDungeon();
+            }
+
             if (test)
             {
                 Console.WriteLine("Setup Successful");
-                userDungeon.DisplayDungeonPaths();
+                userDungeon.DisplayAllDungeonPaths();
                 userDungeon.DFS(0);
             }
         }
