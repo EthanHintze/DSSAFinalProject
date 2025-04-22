@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.VisualBasic;
 
 namespace HerosQuest
@@ -13,6 +14,7 @@ namespace HerosQuest
         public HashSet<int> visited { get; set; }
 
         public Stack<Edge> visitedRooms = new Stack<Edge>();
+        public Stack<Edge> notVisitedRooms = new Stack<Edge>();
 
         public Dictionary<int, List<Edge>> dungeon { get; set; }
         public List<Edge> roomList { get; set; }
@@ -30,6 +32,7 @@ namespace HerosQuest
             {
                 Edge newRoom = new(i, i + 1, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
                 dungeon.Add(i, new List<Edge> { });
+                notVisitedRooms.Push(newRoom);
                 roomList.Add(newRoom);
 
                 if (i == 1)
@@ -50,6 +53,7 @@ namespace HerosQuest
                 Edge newRoom = new(i, i + 1, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
                 dungeon.Add(i, new List<Edge> { });
                 roomList.Add(newRoom);
+                notVisitedRooms.Push(newRoom);
 
                 AddConnection(newRoom);
             }
@@ -78,6 +82,7 @@ namespace HerosQuest
                 Edge newRoom = new(i, i + 1, random.Next(6), random.Next(6), random.Next(6), random.Next(6));
                 dungeon.Add(i, new List<Edge> { });
                 roomList.Add(newRoom);
+                notVisitedRooms.Push(newRoom);
 
                 AddConnection(newRoom);
             }
@@ -161,10 +166,16 @@ namespace HerosQuest
         public void DisplayRoomPaths(int roomID)
         {
             Console.WriteLine("-----Paths------");
-
+            if(dungeon[roomID].Count() == 1)
+            {
+                roomList[roomID].isDeadEnd = true;
+            }
             foreach (Edge edge in dungeon[roomID])
             {
-                Console.WriteLine($"=> Room: {edge.roomID} ");
+                if (!(edge.isDeadEnd && visitedRooms.Contains(edge)))
+                {
+                    Console.WriteLine($"=> Room: {edge.roomID} ");
+                }
             }
         }
 
@@ -201,6 +212,7 @@ class Edge
     public int agilityReq;
     public int intelligenceReq;
     public bool isExit;
+    public bool isDeadEnd;
     public Edge(int RoomID, int To, int Distance, int strReq, int agiReq, int intelReq)
     {
         roomID = RoomID;
@@ -210,5 +222,6 @@ class Edge
         agilityReq = agiReq;
         intelligenceReq = intelReq;
         isExit = false;
+        isDeadEnd = false;
     }
 }
