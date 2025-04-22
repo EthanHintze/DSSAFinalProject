@@ -6,7 +6,7 @@ namespace HerosQuest
     {
         private Random random = new Random();
         private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
-        public static HashSet<int> visited = new HashSet<int>();
+        public HashSet<int> visited { get; set; }
         List<int> path = new List<int>();
         public Dictionary<int, List<Edge>> dungeon { get; set; }
         public List<Edge> roomList { get; set; }
@@ -16,6 +16,7 @@ namespace HerosQuest
         {
             dungeon = new Dictionary<int, List<Edge>>();
             roomList = new List<Edge>();
+            visited = new HashSet<int>();
         }
         public bool DungeonSetup()
         {
@@ -54,15 +55,14 @@ namespace HerosQuest
             int randomConnectingRoom = random.Next(dungeon.Count());
             Edge connectingRoom = roomList[randomConnectingRoom];
 
-            while (dungeon[randomConnectingRoom].Count() == 4)
+            while (dungeon[randomConnectingRoom].Count() == 4 && !connectingRoom.isExit)
             {
                 randomConnectingRoom = random.Next(dungeon.Count());
             }
-            if (!connectingRoom.isExit)
-            {
+            
                 dungeon[randomConnectingRoom].Add(newRoom);
                 dungeon[newRoom.roomID].Add(connectingRoom);
-            }
+            
         }
 
         public void PickExit()
