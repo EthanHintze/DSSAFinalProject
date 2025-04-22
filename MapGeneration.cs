@@ -167,7 +167,7 @@ namespace HerosQuest
         {
             if (random.Next(2) == 0)
             {
-                Console.WriteLine($"You found {PossibleTreasure.Peek()}");
+                Console.WriteLine($"You found {PossibleTreasure.Peek()._name}");
                 Console.WriteLine($"Pick it up?");
 
                 if (playerCharacter.inventory.Count == 5)

@@ -13,7 +13,7 @@ namespace HerosQuest
             while (userDungeon.EndDungeon != true)
             {
                 Console.WriteLine("---What would you like to do---");
-                Console.WriteLine("1) Continue");
+                Console.WriteLine("1) Traverse Dungeon");
                 Console.WriteLine("2) Check Inventory");
                 Console.WriteLine("3) Check Stats");
                 Console.WriteLine("4) Give Up (loser)");
@@ -26,8 +26,10 @@ namespace HerosQuest
                         break;
 
                     case 1:
+                        userDungeon.ListPlayerInventory();
                         break;
                     case 2:
+                        userDungeon.ListPlayerStats();
                         break;
                     case 3:
                         userDungeon.EndDungeon = true;
