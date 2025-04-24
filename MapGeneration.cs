@@ -7,6 +7,7 @@ namespace HerosQuest
         public int startRoom = 0;
         public int nextRoom = 0;
 
+        private Dictionary<int, string> StatTypes = new Dictionary<int, string> { { 0, "Strength" }, { 1, "Agility" }, { 2, "Intellegence" } };
         private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
         private Stack<Item> PossibleTreasure = new Stack<Item>();
         public HashSet<int> visited { get; set; }
@@ -15,6 +16,7 @@ namespace HerosQuest
         public Stack<Edge> notVisitedRooms = new Stack<Edge>();
 
         public Dictionary<int, List<Edge>> dungeon { get; set; }
+        public ChallengeTree challengeTree { get; set; }
         public List<Edge> roomList { get; set; }
 
         public CharacterCreator playerCharacter { get; set; }
@@ -22,18 +24,26 @@ namespace HerosQuest
         public MapGeneration()
         {
             dungeon = new Dictionary<int, List<Edge>>();
+            challengeTree = new ChallengeTree();
             roomList = new List<Edge>();
             visited = new HashSet<int>();
-            playerCharacter = new CharacterCreator(3, 3, 3);
+            playerCharacter = new CharacterCreator(5, 5, 5);
         }
         public bool DungeonSetup()
         {
-            PossibleTreasure.Push(new Item("Sword", 5, 0, 0, 30, false));
+            PossibleTreasure.Push(new Item("Sword", 10, 0, 0, 30, false));
             PossibleTreasure.Push(new Item("Gem", 0, 0, 0, 300, false));
             PossibleTreasure.Push(new Item("Lockpick", 0, 0, 0, 20, true));
             PossibleTreasure.Push(new Item("Smart Glasses", 0, 0, 5, 70, false));
             PossibleTreasure.Push(new Item("Heelys", 0, 5, 0, 50, false));
             PossibleTreasure.Push(new Item("Rock", 0, 0, 0, 1, false));
+
+            for (int i = 0; i > 21; i++)
+            {
+                Challenge newChallenge = new Challenge(random.Next(4), random.Next(11), StatTypes[random.Next(4)]);
+                ChallengeNode newChallengeNode = new ChallengeNode(newChallenge);
+                challengeTree.Insert(newChallenge);
+            }
 
             for (int i = 0; i < 16; i++)
             {
@@ -127,6 +137,11 @@ namespace HerosQuest
 
             Console.WriteLine($"You are in Room {startRoom}");
             CheckForTreasure();
+             Challenge roomChallenge = challengeTree.FindClosest(startRoom);
+            if (!EndDungeon)
+            {
+                Console.WriteLine("This room has a ");
+            }
             TraverseDungeon(startRoom);
             if (!EndDungeon)
             {
@@ -217,6 +232,10 @@ namespace HerosQuest
                 playerCharacter._strength -= playerCharacter.inventory.First()._strengthBuff;
                 playerCharacter._agility -= playerCharacter.inventory.First()._agilityBuff;
                 playerCharacter._intellegence -= playerCharacter.inventory.First()._intellegenceBuff;
+            }
+            if ((IncDec == 3))
+            {
+
             }
         }
 
