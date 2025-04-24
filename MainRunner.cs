@@ -1,5 +1,4 @@
-﻿using System.Data;
-
+﻿
 namespace HerosQuest
 {
     class Program

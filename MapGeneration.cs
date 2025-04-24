@@ -1,6 +1,3 @@
-using System.Data.Common;
-using Microsoft.VisualBasic;
-
 namespace HerosQuest
 {
     class MapGeneration
@@ -166,14 +163,14 @@ namespace HerosQuest
         }
         public void CheckForTreasure()
         {
-            if (random.Next(2) == 0)
+            if (random.Next(10) == 0)
             {
                 Console.WriteLine($"You found {PossibleTreasure.Peek()._name}");
                 Console.WriteLine($"Pick it up?");
 
                 if (playerCharacter.inventory.Count == 5)
                 {
-                    Console.WriteLine($" you will drop {playerCharacter.inventory.First()}");
+                    Console.WriteLine($" you will drop {playerCharacter.inventory.First()._name}");
                 }
                 Console.WriteLine("1) Yes");
                 Console.WriteLine("2) No");
@@ -185,7 +182,7 @@ namespace HerosQuest
                         IncDecPlayerStats(0);
                         IncDecPlayerStats(1);
 
-                        playerCharacter.inventory.Dequeue();
+                        PossibleTreasure.Push(playerCharacter.inventory.Dequeue());
                         playerCharacter.inventory.Enqueue(PossibleTreasure.Peek());
                         PossibleTreasure.Pop();
                     }
