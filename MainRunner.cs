@@ -6,7 +6,6 @@ namespace HerosQuest
 
         static void Main(string[] args)
         {
-            Stack<Edge> visitedRooms = new Stack<Edge>();
             MapGeneration userDungeon = new MapGeneration();
             bool test = userDungeon.DungeonSetup();
             while (userDungeon.EndDungeon != true)

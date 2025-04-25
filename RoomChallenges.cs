@@ -21,9 +21,9 @@ namespace HerosQuest
 
     public class ChallengeNode
     {
-        public Challenge Challenge;
+        public Challenge Challenge {get; set;}
         public ChallengeNode Left, Right;
-        public int Height;
+        public int Height {get; set;}
 
         public ChallengeNode(Challenge challenge)
         {
@@ -58,45 +58,6 @@ namespace HerosQuest
             return Balance(node);
         }
 
-        public void Remove(int difficulty)
-        {
-            root = Remove(root, difficulty);
-        }
-
-        private ChallengeNode Remove(ChallengeNode node, int difficulty)
-        {
-            if (node == null) return null;
-
-            if (difficulty < node.Challenge.Difficulty)
-                node.Left = Remove(node.Left, difficulty);
-            else if (difficulty > node.Challenge.Difficulty)
-                node.Right = Remove(node.Right, difficulty);
-            else
-            {
-                if (node.Left == null || node.Right == null)
-                {
-                    node = (node.Left != null) ? node.Left : node.Right;
-                }
-                else
-                {
-                    ChallengeNode successor = GetMin(node.Right);
-                    node.Challenge = successor.Challenge;
-                    node.Right = Remove(node.Right, successor.Challenge.Difficulty);
-                }
-            }
-
-            if (node == null) return null;
-
-            UpdateHeight(node);
-            return Balance(node);
-        }
-
-        private ChallengeNode GetMin(ChallengeNode node)
-        {
-            while (node.Left != null) node = node.Left;
-            return node;
-        }
-
         private ChallengeNode Balance(ChallengeNode node)
         {
             int balance = GetBalance(node);
@@ -128,30 +89,30 @@ namespace HerosQuest
 
         private ChallengeNode RotateRight(ChallengeNode y)
         {
-            ChallengeNode x = y.Left;
-            ChallengeNode T2 = x.Right;
+            ChallengeNode left = y.Left;
+            ChallengeNode right = left.Right;
 
-            x.Right = y;
-            y.Left = T2;
+            left.Right = y;
+            y.Left = right;
 
             UpdateHeight(y);
-            UpdateHeight(x);
+            UpdateHeight(left);
 
-            return x;
+            return left;
         }
 
         private ChallengeNode RotateLeft(ChallengeNode x)
         {
-            ChallengeNode y = x.Right;
-            ChallengeNode T2 = y.Left;
+            ChallengeNode right = x.Right;
+            ChallengeNode left = right.Left;
 
-            y.Left = x;
-            x.Right = T2;
+            right.Left = x;
+            x.Right = left;
 
             UpdateHeight(x);
-            UpdateHeight(y);
+            UpdateHeight(right);
 
-            return y;
+            return right;
         }
 
         private void UpdateHeight(ChallengeNode node)

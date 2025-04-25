@@ -13,8 +13,6 @@ namespace HerosQuest
         public int nextRoom = 0;
 
 
-        private Dictionary<int, string> StatTypes = new Dictionary<int, string> { { 0, "Strength" }, { 1, "Agility" }, { 2, "Intellegence" } };
-        private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
         private Stack<Item> PossibleTreasure = new Stack<Item>();
         public HashSet<int> visited { get; set; }
 
