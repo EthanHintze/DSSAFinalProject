@@ -3,6 +3,7 @@ namespace HerosQuest
     class MapGeneration
     {
         private Random random = new Random();
+        private Challenge roomChallenge;
         public bool EndDungeon = false;
         public int startRoom = 0;
         public int nextRoom = 0;
@@ -16,7 +17,7 @@ namespace HerosQuest
         public Stack<Edge> notVisitedRooms = new Stack<Edge>();
 
         public Dictionary<int, List<Edge>> dungeon { get; set; }
-        public ChallengeTree challengeTree { get; set; }
+        public ChallengeTree challengeTree = new ChallengeTree();
         public List<Edge> roomList { get; set; }
 
         public CharacterCreator playerCharacter { get; set; }
@@ -38,12 +39,13 @@ namespace HerosQuest
             PossibleTreasure.Push(new Item("Heelys", 0, 5, 0, 50, false));
             PossibleTreasure.Push(new Item("Rock", 0, 0, 0, 1, false));
 
-            for (int i = 0; i > 21; i++)
+            for (int i = 0; i < 21; i++)
             {
-                Challenge newChallenge = new Challenge(random.Next(4), random.Next(11), StatTypes[random.Next(4)]);
-                ChallengeNode newChallengeNode = new ChallengeNode(newChallenge);
+                Challenge newChallenge = new Challenge(random.Next(3), i, random.Next(11));
                 challengeTree.Insert(newChallenge);
             }
+            Challenge LockChallenge = new Challenge(3, 21, random.Next(11), "Lockpick");
+            challengeTree.Insert(LockChallenge);
 
             for (int i = 0; i < 16; i++)
             {
@@ -136,15 +138,30 @@ namespace HerosQuest
             visitedRooms.Push(roomList[startRoom]);
 
             Console.WriteLine($"You are in Room {startRoom}");
-            CheckForTreasure();
-             Challenge roomChallenge = challengeTree.FindClosest(startRoom);
+            roomChallenge = challengeTree.FindClosest(startRoom);
             if (!EndDungeon)
             {
-                Console.WriteLine("This room has a ");
-            }
-            TraverseDungeon(startRoom);
-            if (!EndDungeon)
-            {
+                if (startRoom != 0)
+                {
+                    CheckForTreasure();
+                    if(random.Next(2) == 0)
+                    {
+
+                        Console.WriteLine($"This room has a {roomChallenge.Type} encounter");
+                        if (!CheckChallengeStats())
+                        {
+                            Console.WriteLine($"You failed the {roomChallenge.Type} encounter");
+                            Console.WriteLine($"Your health is now: {playerCharacter._health}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You passed the {roomChallenge.Type} encounter");
+                        }
+                    }
+                }
+
+                TraverseDungeon(startRoom);
+
                 Console.Write("Where will you go?: ");
                 nextRoom = int.Parse(Console.ReadLine());
 
@@ -233,10 +250,7 @@ namespace HerosQuest
                 playerCharacter._agility -= playerCharacter.inventory.First()._agilityBuff;
                 playerCharacter._intellegence -= playerCharacter.inventory.First()._intellegenceBuff;
             }
-            if ((IncDec == 3))
-            {
 
-            }
         }
 
         public void ListPlayerInventory()
@@ -301,6 +315,45 @@ namespace HerosQuest
                 }
                 Console.WriteLine();
             }
+        }
+        public bool CheckChallengeStats()
+        {
+            if (roomChallenge.Type == "Combat")
+            {
+                if (roomChallenge.RequiredStat > playerCharacter._strength)
+                {
+                    playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._strength;
+                    return false;
+                }
+            }
+
+            if (roomChallenge.Type == "Puzzle")
+            {
+                if (roomChallenge.RequiredStat > playerCharacter._intellegence)
+                {
+                    playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._intellegence;
+                    return false;
+                }
+            }
+
+            if (roomChallenge.Type == "Trap")
+            {
+                if (roomChallenge.RequiredStat > playerCharacter._agility)
+                {
+                    playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._agility;
+                    return false;
+                }
+            }
+            if (roomChallenge.Type == "Locked")
+            {
+                
+                if (true)
+                {
+                    playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._agility;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

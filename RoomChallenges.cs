@@ -2,21 +2,20 @@ namespace HerosQuest
 {
     public class Challenge
     {
-        public List<string> ChallengeType = ["Combat", "Puzzle", "Trap" ];
+        public List<string> ChallengeType = ["Combat", "Puzzle", "Trap", "Locked" ];
         private Random random = new Random();
         public string Type { get; set; }
         public int Difficulty { get; set; }
         public string RequiredItem { get; set; }
-        public string RequiredStat { get; set; }
+        public int RequiredStat { get; set; }
 
-        public Challenge(int type, int difficulty, string requiredStat, string requiredItem = null)
+        public Challenge(int type, int difficulty, int requiredStat, string requiredItem = null)
         {
             Type = ChallengeType[type];
             Difficulty = difficulty;
             RequiredStat = requiredStat;
             RequiredItem = requiredItem;
         }
-
 
     }
 
@@ -30,6 +29,7 @@ namespace HerosQuest
         {
             Challenge = challenge;
             Height = 1;
+            
         }
     }
 
@@ -37,7 +37,7 @@ namespace HerosQuest
     public class ChallengeTree
     {
 
-        private ChallengeNode root;
+        public ChallengeNode root;
 
         // Public Insert
         public void Insert(Challenge challenge)
@@ -175,20 +175,26 @@ namespace HerosQuest
         // Find closest challenge
         public Challenge FindClosest(int roomNumber)
         {
-            return FindClosest(root, roomNumber, null);
+            return FindClosest(root, roomNumber, root.Challenge);
         }
 
         private Challenge FindClosest(ChallengeNode node, int roomNumber, Challenge closest)
         {
             if (node == null) return closest;
 
-            if (closest == null || Math.Abs(node.Challenge.Difficulty - roomNumber) < Math.Abs(closest.Difficulty - roomNumber))
+            if (Math.Abs(node.Challenge.Difficulty - roomNumber) < Math.Abs(closest.Difficulty - roomNumber))
+            {
                 closest = node.Challenge;
+            }
 
             if (roomNumber < node.Challenge.Difficulty)
+            {   
                 return FindClosest(node.Left, roomNumber, closest);
+            }
             else
+            {   
                 return FindClosest(node.Right, roomNumber, closest);
+            }
         }
     }
 
