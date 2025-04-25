@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace HerosQuest
 {
     class MapGeneration
@@ -5,8 +7,11 @@ namespace HerosQuest
         private Random random = new Random();
         private Challenge roomChallenge;
         public bool EndDungeon = false;
+        public bool HasKey = false;
+        public bool HasSword = false;
         public int startRoom = 0;
         public int nextRoom = 0;
+
 
         private Dictionary<int, string> StatTypes = new Dictionary<int, string> { { 0, "Strength" }, { 1, "Agility" }, { 2, "Intellegence" } };
         private Dictionary<int, string> PossibleRequiredItems = new Dictionary<int, string> { { 1, "Lockpick" } };
@@ -32,16 +37,16 @@ namespace HerosQuest
         }
         public bool DungeonSetup()
         {
-            PossibleTreasure.Push(new Item("Sword", 10, 0, 0, 30, false));
             PossibleTreasure.Push(new Item("Gem", 0, 0, 0, 300, false));
-            PossibleTreasure.Push(new Item("Lockpick", 0, 0, 0, 20, true));
             PossibleTreasure.Push(new Item("Smart Glasses", 0, 0, 5, 70, false));
             PossibleTreasure.Push(new Item("Heelys", 0, 5, 0, 50, false));
+            PossibleTreasure.Push(new Item("Lockpick", 0, 0, 0, 20, true));
+            PossibleTreasure.Push(new Item("Sword", 10, 0, 0, 30, false));
             PossibleTreasure.Push(new Item("Rock", 0, 0, 0, 1, false));
 
             for (int i = 0; i < 21; i++)
             {
-                Challenge newChallenge = new Challenge(random.Next(3), i, random.Next(11));
+                Challenge newChallenge = new Challenge(random.Next(3), i, random.Next(11), "");
                 challengeTree.Insert(newChallenge);
             }
             Challenge LockChallenge = new Challenge(3, 21, random.Next(11), "Lockpick");
@@ -135,51 +140,60 @@ namespace HerosQuest
         public void RunDungeon()
         {
             Console.Clear();
-            visitedRooms.Push(roomList[startRoom]);
-
-            Console.WriteLine($"You are in Room {startRoom}");
-            roomChallenge = challengeTree.FindClosest(startRoom);
             if (!EndDungeon)
             {
+                visitedRooms.Push(roomList[startRoom]);
+
+                Console.WriteLine($"You are in Room {startRoom}");
+                roomChallenge = challengeTree.FindClosest(startRoom);
                 if (startRoom != 0)
                 {
                     CheckForTreasure();
-                    if(random.Next(2) == 0)
+                    if (random.Next(2) == 0)
                     {
 
                         Console.WriteLine($"This room has a {roomChallenge.Type} encounter");
-                        if (!CheckChallengeStats())
+                        if (roomChallenge.Type != "Locked")
                         {
-                            Console.WriteLine($"You failed the {roomChallenge.Type} encounter");
-                            Console.WriteLine($"Your health is now: {playerCharacter._health}");
+                            if (!CheckChallengeStats())
+                            {
+                                Console.WriteLine($"You failed the {roomChallenge.Type} encounter");
+                                Console.WriteLine($"Your health is now: {playerCharacter._health}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You passed the {roomChallenge.Type} encounter");
+                            }
                         }
                         else
                         {
-                            Console.WriteLine($"You passed the {roomChallenge.Type} encounter");
+                            if (!CheckChallengeStats())
+                            {
+                                Console.WriteLine("This room is locked find a key");
+                                Console.ReadKey();
+                                RunDungeon();
+                            }
                         }
                     }
                 }
 
-                TraverseDungeon(startRoom);
 
-                Console.Write("Where will you go?: ");
-                nextRoom = int.Parse(Console.ReadLine());
-
-                if (MoveForward(startRoom, nextRoom))
+                if (!TraverseDungeon(startRoom))
                 {
-                    startRoom = nextRoom;
-                }
-                else
-                {
-                    Console.WriteLine("That path doesn't exist, try again");
-                    RunDungeon();
+                    Console.Write("Where will you go?: ");
+                    nextRoom = int.Parse(Console.ReadLine());
+
+                    if (MoveForward(startRoom, nextRoom))
+                    {
+                        startRoom = nextRoom;
+                    }
+                    else
+                    {
+                        Console.WriteLine("That path doesn't exist, try again");
+                        RunDungeon();
+                    }
                 }
 
-
-            }
-            else
-            {
-                Console.WriteLine("You found the exit");
             }
         }
         private bool MoveForward(int currentRoom, int nextRoom)
@@ -199,7 +213,6 @@ namespace HerosQuest
             {
                 Console.WriteLine($"You found {PossibleTreasure.Peek()._name}");
                 Console.WriteLine($"Pick it up?");
-
                 if (playerCharacter.inventory.Count == 5)
                 {
                     Console.WriteLine($" you will drop {playerCharacter.inventory.First()._name}");
@@ -213,6 +226,14 @@ namespace HerosQuest
                     {
                         IncDecPlayerStats(0);
                         IncDecPlayerStats(1);
+                        if (playerCharacter.inventory.First()._name == "Lockpick")
+                        {
+                            HasKey = false;
+                        }
+                        if (playerCharacter.inventory.First()._name == "Sword")
+                        {
+                            HasSword = false;
+                        }
 
                         PossibleTreasure.Push(playerCharacter.inventory.Dequeue());
                         playerCharacter.inventory.Enqueue(PossibleTreasure.Peek());
@@ -224,6 +245,14 @@ namespace HerosQuest
 
                         playerCharacter.inventory.Enqueue(PossibleTreasure.Peek());
                         PossibleTreasure.Pop();
+                        if (PossibleTreasure.Peek()._name == "Lockpick")
+                        {
+                            HasKey = true;
+                        }
+                        if (PossibleTreasure.Peek()._name == "Sword")
+                        {
+                            HasSword = true;
+                        }
                     }
                     Console.WriteLine("Item picked up");
 
@@ -233,6 +262,7 @@ namespace HerosQuest
                     Console.WriteLine("Item was lost to the dungeon");
 
                 }
+
             }
         }
 
@@ -272,6 +302,11 @@ namespace HerosQuest
         public bool TraverseDungeon(int roomID)
         {
             if (roomList[roomID].isExit)
+            {
+                EndDungeon = true;
+                return true;
+            }
+            if (playerCharacter._health <= 0)
             {
                 EndDungeon = true;
                 return true;
@@ -320,6 +355,10 @@ namespace HerosQuest
         {
             if (roomChallenge.Type == "Combat")
             {
+                if (HasSword)
+                {
+                    return true;
+                }
                 if (roomChallenge.RequiredStat > playerCharacter._strength)
                 {
                     playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._strength;
@@ -346,10 +385,9 @@ namespace HerosQuest
             }
             if (roomChallenge.Type == "Locked")
             {
-                
-                if (true)
+
+                if (!HasKey)
                 {
-                    playerCharacter._health -= roomChallenge.RequiredStat - playerCharacter._agility;
                     return false;
                 }
             }

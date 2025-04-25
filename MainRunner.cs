@@ -40,13 +40,27 @@ namespace HerosQuest
                         break;
                 }
             }
+            if (userDungeon.playerCharacter._health <= 0)
+                {
+                    Console.WriteLine("You Died");
 
-            if (test)
-            {
-                Console.WriteLine("Setup Successful");
-                userDungeon.DisplayAllDungeonPaths();
-                userDungeon.DFS(0);
-            }
+                }
+                else
+                {
+                    int totalProfit = 0;
+                    Console.WriteLine("You found the exit");
+                    foreach (Item item in userDungeon.playerCharacter.inventory)
+                    {
+                        totalProfit += item._price;
+                    }
+                }
+
+            // if (test)
+            // {
+            //     Console.WriteLine("Setup Successful");
+            //     userDungeon.DisplayAllDungeonPaths();
+            //     userDungeon.DFS(0);
+            // }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace HerosQuest
         public string RequiredItem { get; set; }
         public int RequiredStat { get; set; }
 
-        public Challenge(int type, int difficulty, int requiredStat, string requiredItem = null)
+        public Challenge(int type, int difficulty, int requiredStat, string requiredItem)
         {
             Type = ChallengeType[type];
             Difficulty = difficulty;

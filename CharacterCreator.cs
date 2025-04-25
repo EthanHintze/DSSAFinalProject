@@ -13,7 +13,7 @@ namespace HerosQuest
             _strength = strength;
             _agility = agility;
             _intellegence = intellegence;
-            _health = 20;
+            _health = 3;
         }
 
     }
