@@ -39,7 +39,6 @@ namespace HerosQuest
 
         public ChallengeNode root;
 
-        // Public Insert
         public void Insert(Challenge challenge)
         {
             root = privInsert(root, challenge);
@@ -59,7 +58,6 @@ namespace HerosQuest
             return Balance(node);
         }
 
-        // Remove function with AVL rebalancing
         public void Remove(int difficulty)
         {
             root = Remove(root, difficulty);
@@ -75,7 +73,6 @@ namespace HerosQuest
                 node.Right = Remove(node.Right, difficulty);
             else
             {
-                // Node found
                 if (node.Left == null || node.Right == null)
                 {
                     node = (node.Left != null) ? node.Left : node.Right;
@@ -94,46 +91,41 @@ namespace HerosQuest
             return Balance(node);
         }
 
-        // Get minimum node (in-order successor)
         private ChallengeNode GetMin(ChallengeNode node)
         {
             while (node.Left != null) node = node.Left;
             return node;
         }
 
-        // Balance a node if necessary
         private ChallengeNode Balance(ChallengeNode node)
         {
             int balance = GetBalance(node);
 
-            // Left heavy
             if (balance > 1)
             {
                 if (GetBalance(node.Left) >= 0)
-                    return RotateRight(node);           // LL
+                    return RotateRight(node);           
                 else
                 {
-                    node.Left = RotateLeft(node.Left);  // LR
+                    node.Left = RotateLeft(node.Left);  
                     return RotateRight(node);
                 }
             }
 
-            // Right heavy
             if (balance < -1)
             {
                 if (GetBalance(node.Right) <= 0)
-                    return RotateLeft(node);            // RR
+                    return RotateLeft(node);            
                 else
                 {
-                    node.Right = RotateRight(node.Right); // RL
+                    node.Right = RotateRight(node.Right); 
                     return RotateLeft(node);
                 }
             }
 
-            return node; // Already balanced
+            return node; 
         }
 
-        // Rotate right (LL case)
         private ChallengeNode RotateRight(ChallengeNode y)
         {
             ChallengeNode x = y.Left;
@@ -148,7 +140,6 @@ namespace HerosQuest
             return x;
         }
 
-        // Rotate left (RR case)
         private ChallengeNode RotateLeft(ChallengeNode x)
         {
             ChallengeNode y = x.Right;
@@ -163,7 +154,6 @@ namespace HerosQuest
             return y;
         }
 
-        // Update height of a node
         private void UpdateHeight(ChallengeNode node)
         {
             node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
@@ -172,7 +162,6 @@ namespace HerosQuest
         private int GetHeight(ChallengeNode node) => node?.Height ?? 0;
         private int GetBalance(ChallengeNode node) => GetHeight(node.Left) - GetHeight(node.Right);
 
-        // Find closest challenge
         public Challenge FindClosest(int roomNumber)
         {
             return FindClosest(root, roomNumber, root.Challenge);
