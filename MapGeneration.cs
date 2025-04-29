@@ -39,8 +39,8 @@ namespace HerosQuest
             PossibleTreasure.Push(new Item("Smart Glasses", 0, 0, 5, 70, false));
             PossibleTreasure.Push(new Item("Heelys", 0, 5, 0, 50, false));
             PossibleTreasure.Push(new Item("Lockpick", 0, 0, 0, 20, true));
-            PossibleTreasure.Push(new Item("Sword", 10, 0, 0, 30, false));
             PossibleTreasure.Push(new Item("Rock", 0, 0, 0, 1, false));
+            PossibleTreasure.Push(new Item("Sword", 10, 0, 0, 30, false));
 
             for (int i = 0; i < 21; i++)
             {
@@ -207,7 +207,7 @@ namespace HerosQuest
         }
         public void CheckForTreasure()
         {
-            if (random.Next(10) == 0)
+            if (random.Next(4) == 0)
             {
                 Console.WriteLine($"You found {PossibleTreasure.Peek()._name}");
                 Console.WriteLine($"Pick it up?");

@@ -1,10 +1,7 @@
-Time Complexity for CheckForTreasure() (line 210)
-Because queue's have a bestcase of O(1) the worst possible time complexity 
-is O(n) if you had to access inventory.First()  multple times
+The time complexity of the CheckForTreasure function is O(1), or constant time, under typical circumstances. This is because all operations within the function—such as checking a random value, peeking at a stack, accessing and modifying queue elements, printing to the console, and parsing input—are performed in constant time and do not depend on the size of the data structures beyond fixed checks (e.g., inventory.Count == 5). While data structures like queues and stacks are used, their operations are each constant time. Therefore, the overall runtime does not scale with the size of any collection involved, assuming the inventory has a capped size. The function's complexity remains constant regardless of external inputs or the size of the PossibleTreasure stack. Would you like a space or time complexity analysis for a modified version with unbounded
 
 Time Complexity for TraverseDungeon()
-the time complexity of this operation is O(n+m) where n is number of 
-rooms and m is the number of edges
+The time complexity of the TraverseDungeon function is O(1), or constant time. This is because the function performs a fixed number of operations regardless of the size of the dungeon or the number of rooms. It checks two simple conditions: whether the current room is an exit and whether the player's health is less than or equal to zero. Both of these are constant-time operations involving direct access to values. The call to DisplayRoomPaths(roomID) may have additional complexity depending on its implementation, but assuming it also operates in constant or bounded time, the overall complexity of TraverseDungeon remains constant. 
 
 Time Complexity for FindClosest
-The time complexity of this operation is O(log n) where n is the number of nodes
+The time complexity of the FindClosest function is O(h), where h is the height of the binary search tree rooted at node. This function performs a recursive traversal down one branch of the tree—either left or right—based on a comparison between roomNumber and the Difficulty of the current node's Challenge. At each recursive call, it evaluates the absolute difference between the current challenge's difficulty and the target roomNumber, updating the closest match if necessary. Since the function only explores one path from the root to a leaf, rather than the entire tree, its performance depends on the tree's height. In the best case of a balanced binary search tree, the height is logarithmic in relation to the number of nodes (O(log n)), making the function efficient.
